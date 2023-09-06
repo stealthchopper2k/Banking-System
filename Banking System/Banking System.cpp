@@ -1,11 +1,14 @@
 // Banking System.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
+
+#include "BankConsole.h"
 #include <iostream>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+  BankConsole console;
+
+  console.Menu();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
