@@ -2,27 +2,20 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <array>
 
-  class Menu_Interface {
-  public:
-    typedef void(*Menu_Processing_Function_Ptr);
-    struct Menu_Item {
-      int number;
-      std::string value;
-      Menu_Processing_Function_Ptr p_processing_function;
-    };
-
-    virtual std::vector<Menu_Item> GetMenu() = 0;
+ struct Menu_Interface {
+    typedef void(Menu::*Menu_Processing_Function_Ptr)();
+    int number;
+    std::string value;
+    Menu_Processing_Function_Ptr p_processing_function;
   };
 
-  class Menu : public Menu_Interface {
+  class Menu {
   public:
-    std::vector<Menu_Item> menu_items;
+    std::array<Menu_Interface,3> menu_items;
 
     void Processor_1() {
-      std::cout << "Processing Option 1" << std::endl;
-    };
-    void Processor_2() {
       std::cout << "Processing Option 1" << std::endl;
     };
 
@@ -32,14 +25,14 @@
       std::cout << "Todo Home stuff" << std::endl;
     };
 
-    std::vector<Menu_Item> initialiseMenu() {
-      std::vector<Menu_Item> items;
+    std::array<Menu_Interface, 3> initialiseMenu() {
+        Menu_Interface menu_items[3] = {
+        {1, "Option 1", &Menu::Home}, // You can provide the processing function here
+        {2, "Option 2", nullptr}, // You can provide the processing function here
+        {3, "Option 3", nullptr}  // You can provide the processing function here
+        };
 
-      auto homeFunction = [this]() { Home(); }; // Binds the home function to a valid pointer
-
-      items.push_back({ 1, "View Balance", &homeFunction });
-      items.push_back({ 2, "Deposit", nullptr });
-      items.push_back({ 3, "Withdraw", nullptr });
-      return items;
-    }
+        return { menu_items[0]};
+    };
   };
+
