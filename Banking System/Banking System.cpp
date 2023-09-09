@@ -22,14 +22,13 @@ Menu getMenu() {
     return menu;
 };
 
-
 int main() {
     Menu main_menu = getMenu();
     Menu_Engine menu_engine;
 
-
-    menu_engine.Init_Menu(main_menu.getMenuItems(), 2);
+    menu_engine.Init_Menu(main_menu.getMenuItems());
 
 	std::cout << "its gonna be fine \n";
+    return 0;
 }
 

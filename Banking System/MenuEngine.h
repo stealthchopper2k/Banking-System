@@ -6,7 +6,8 @@
 
 struct Menu_Interface;
 
-typedef std::vector<Menu_Interface>(*Menu_Processing_Function_Ptr)();
+//typedef std::vector<Menu_Interface>(*Menu_Processing_Function_Ptr)();
+using Menu_Processing_Function_Ptr = std::vector<Menu_Interface>(*)();
 
 struct Menu_Interface {
 	int number;
@@ -16,14 +17,14 @@ struct Menu_Interface {
 
 class Menu_Engine {
 public:
-	// we use curr_menu as a tracking of menu state so user can go BACK
-	std::stack<std::vector<Menu_Interface>> curr_menu;
+	std::stack<std::vector<Menu_Interface>> curr_menu;	// we use curr_menu as a tracking of menu state so user can go BACK
 
-	void Init_Menu(Menu_Interface* menu, unsigned int menu_sz) {
+	void Init_Menu(std::vector<Menu_Interface>& menu) {
 		bool flag = true;
-
 		while (flag) {
-			for (int i = 0; i < menu_sz; i++) {
+			int sz = menu.size();
+
+			for (size_t i = 0; i < sz; i++) {
 				std::cout << menu[i].number << " " << menu[i].value << "\n";
 			}
 
@@ -31,21 +32,20 @@ public:
 			std::cout << "Please make a selection: \n";
 			std::cin >> selection;
 
-			if (selection > menu_sz || selection < 1 || std::cin.fail()) {
+			if (selection > sz || selection < 1 || std::cin.fail()) {
 				std::cout << "Please Enter a Valid selection: \n";
 				std::cin.clear(); // clear buffer 
 				while (std::cin.get() != '\n'); // clear stream
 			}
 			else if (selection) {
-				auto processing_function = menu[selection - 1].p_processing_function;
+				const Menu_Interface& selected_item = menu[static_cast<size_t>(selection) - 1];
+				auto processing_function = selected_item.p_processing_function;
+
 				if (processing_function != nullptr) {
-					std::cout << "running";
+					 
 					std::vector<Menu_Interface> new_menu = processing_function();
-
-					std::cout << new_menu[0].number << new_menu[0].value << "x";
-
 					//curr_menu.push(&new_menu[0]);
-					menu = &new_menu[0];
+					menu = new_menu;
 				}
 				else {
 					// fallback

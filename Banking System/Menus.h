@@ -20,8 +20,8 @@ public:
         Print_Contents();
     };
 
-    Menu_Interface* getMenuItems() {
-        return &menu_items[0];
+    std::vector<Menu_Interface>& getMenuItems() {
+        return menu_items;
     }
 
     void Print_Contents() {
