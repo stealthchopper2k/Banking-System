@@ -3,36 +3,30 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include "./MenuEngine.h"
 
- struct Menu_Interface {
-    typedef void(Menu::*Menu_Processing_Function_Ptr)();
-    int number;
-    std::string value;
-    Menu_Processing_Function_Ptr p_processing_function;
-  };
+class Menu {
+private:
+    std::vector<Menu_Interface> menu_items;
 
-  class Menu {
-  public:
-    std::array<Menu_Interface,3> menu_items;
-
-    void Processor_1() {
-      std::cout << "Processing Option 1" << std::endl;
+public:
+    Menu(std::vector<Menu_Interface> menu) : menu_items(menu) {
+        std::cout << "Initialised bank_menu with menu \n";
     };
 
-    Menu() : menu_items(initialiseMenu()) {};
-
-    void Home() {
-      std::cout << "Todo Home stuff" << std::endl;
+    Menu(Menu&& menu) noexcept : menu_items(menu.menu_items) {
+        menu_items = std::move(menu.menu_items);
+        std::cout << "move" << std::endl;
+        Print_Contents();
     };
 
-    std::array<Menu_Interface, 3> initialiseMenu() {
-        Menu_Interface menu_items[3] = {
-        {1, "Option 1", &Menu::Home}, // You can provide the processing function here
-        {2, "Option 2", nullptr}, // You can provide the processing function here
-        {3, "Option 3", nullptr}  // You can provide the processing function here
-        };
+    Menu_Interface* getMenuItems() {
+        return &menu_items[0];
+    }
 
-        return { menu_items[0]};
-    };
-  };
-
+    void Print_Contents() {
+        for (const auto& item : menu_items) {
+            std::cout << item.number << " " << item.value << " ";
+        }
+    }
+};
