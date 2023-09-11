@@ -18,7 +18,7 @@
     <ClCompile Include="MenuEngine.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="Banking System.cpp" />
+    <ClCompile Include="BankingSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="State.h">
